@@ -1,0 +1,73 @@
+{
+  "name": "DayniteJs",
+  "description": "A lightweight JavaScript library for toggling light and dark themes.",
+  "version": "1.0.0",
+  "main": "dist/DayniteJs.min.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "build": "rollup -c",
+    "ls-lint": "ls-lint",
+    "prepare": "npm run build",
+    "build:css": "npx tailwindcss -i demo/input.css -o demo/styles.css",
+    "deploy": "gh-pages -d demo",
+    "postversion": "echo 'Remember to update the changelog!'",
+    "serve": "npx serve ."
+  },
+  "exports": {
+    "import": "./dist/DayniteJs.min.js",
+    "require": "./dist/DayniteJs.min.js.map"
+  },
+  "keywords": [
+    "Dark mode",
+    "Light-mode",
+    "Daynite",
+    "DayniteJs",
+    "Theme",
+    "Light",
+    "Dark",
+    "css",
+    "javascript",
+    "tailwindcss"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suhaibmuhd01/DayniteJs.git"
+  },
+  "author": "Suhaib Muhammad Babangida",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@eslint/js": "^9.31.0",
+    "@jest/globals": "^30.0.4",
+    "@rollup/plugin-terser": "^0.4.4",
+    "babel-jest": "^30.0.4",
+    "eslint": "^9.31.0",
+    "globals": "^16.3.0",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
+    "jsdom": "^26.1.0",
+    "rollup": "^4.44.2"
+  },
+  "files": [
+    "example",
+    "dist",
+    "dist/DayniteJs.min.js",
+    "dist/DayniteJs.min.js.map",
+    "docs",
+    "src",
+    "test",
+    ".gitignore",
+    "API.md",
+    "babel.config.js",
+    "CHANGELOG.md",
+    "eslint.config.js",
+    "jest.config.js",
+    "LICENSE",
+    "Package-lock.json",
+    "package.json",
+    "README.md",
+    "rollup.config.js"
+  ]
+}

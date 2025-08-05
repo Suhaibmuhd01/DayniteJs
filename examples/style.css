@@ -1,0 +1,35 @@
+/* DayniteJs demo styles */
+
+/* Smooth transitions for theme changes */
+.DayniteJs-transition,
+.DayniteJs-transition * {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Base theme variables */
+[data-theme="light"] {
+  --bg-color: #ffffff;
+  --text-color: #1f2937;
+  --button-bg: #3b82f6;
+  --button-text: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #1f2937;
+  --text-color: #f3f4f6;
+  --button-bg: #60a5fa;
+  --button-text: #1f2937;
+}
+
+/* Apply variables */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Tailwind override for button */
+#toggle-btn {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}

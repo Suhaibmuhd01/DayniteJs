@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DayniteJs Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Smooth transitions */
+    .DayniteJs-transition,
+    .DayniteJs-transition * {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Theme-specific styles */
+    [data-theme="light"] {
+      --bg-color: #ffffff;
+      --text-color: #1f2937;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1f2937;
+      --text-color: #f3f4f6;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center">
+  <h1 class="text-3xl font-bold mb-4">DayniteJs Demo</h1>
+  <p class="mb-4">
+    Toggle between light and dark themes using the button below.
+  </p>
+  <button id="toggle-btn" aria-label="Toggle theme" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+    Toggle Theme
+  </button>
+  <div id="error-message" style="color: red; margin-top: 1rem;"></div>
+</body>
+<script type="module">
+(async () => {
+  try {
+    const module = await import("../dist/DayniteJs.min.js");
+    const DayniteJs = module.default;
+    const daynite = new DayniteJs({
+      themes: ["light", "dark"],
+      defaultTheme: "light",
+      customStyles: {
+        dark: {
+          "--bg-color": "#1f2937",
+          "--text-color": "#f3f4f6",
+        },
+        light: {
+          "--bg-color": "#ffffff",
+          "--text-color": "#1f2937",
+        },
+      },
+    });
+    document.getElementById("toggle-btn").addEventListener("click", () => daynite.toggle());
+    daynite.onThemeChange((theme) => console.log(`Theme changed to: ${theme}`));
+  } catch (err) {
+    document.getElementById("error-message").textContent =
+      "Failed to load DayniteJs library. Please make sure you have run 'npm run build' and are serving the project with 'npm run serve'.";
+    console.error(err);
+  }
+})();
+</script>
+
+</html>

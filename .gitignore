@@ -1,0 +1,13 @@
+dist/
+node_modules/
+coverage/
+test/
+build/
+.vscode/
+.DS_Store
+.env
+*.log
+*.tmp
+*.cache
+*.swp
+*.bak
