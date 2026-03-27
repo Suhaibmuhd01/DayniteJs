@@ -2,7 +2,7 @@
  * DayniteJs: Core theme toggle logic.
  * @module DayniteJs
  * @author Suhaib Muhammad Babangida <suhaibmuhd04@gmail.com>
- * @version 1.0.0
+ * @version 1.1.0
  */
 import { getStoredTheme, storeTheme } from '../utils/storage.js';
 import { isValidTheme } from '../utils/validation.js';
@@ -62,6 +62,7 @@ export default class DayniteJs {
         if (this._transitionTimer) {
             clearTimeout(this._transitionTimer);
         }
+        this.callbacks = [];
     }
 
     /**

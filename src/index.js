@@ -1,7 +1,7 @@
 /**
  * DayniteJs entry point.
  * @author Suhaib Muhammad Babangida <suhaibmuhd04@gmail.com>
- * @version 1.0.0
+ * @version 1.1.0
  * @license MIT
  */
 import DayniteJs from './core/DayniteJs.js';
