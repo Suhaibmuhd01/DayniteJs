@@ -27,6 +27,8 @@ export default class DayniteJs {
         this.storageKey = typeof options.storageKey === 'string' ? options.storageKey : DEFAULT_STORAGE_KEY;
         this.customStyles = typeof options.customStyles === 'object' && options.customStyles !== null ? options.customStyles : {};
         this.callbacks = [];
+        this._transitionTimer = null;
+        this._mediaQueryListener = null;
         this.init();
     }
 
@@ -42,10 +44,23 @@ export default class DayniteJs {
         this.setTheme(initialTheme);
 
         // Listen for system theme changes
-        if (window.matchMedia) {
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (typeof window !== 'undefined' && window.matchMedia) {
+            this._mediaQueryListener = (e) => {
                 this.setTheme(e.matches ? 'dark' : 'light');
-            });
+            };
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this._mediaQueryListener);
+        }
+    }
+
+    /**
+     * Destroys the instance and cleans up memory.
+     */
+    destroy() {
+        if (typeof window !== 'undefined' && window.matchMedia && this._mediaQueryListener) {
+            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this._mediaQueryListener);
+        }
+        if (this._transitionTimer) {
+            clearTimeout(this._transitionTimer);
         }
     }
 
@@ -59,7 +74,9 @@ export default class DayniteJs {
             theme = this.defaultTheme;
         }
 
-        requestAnimationFrame(() => {
+        if (typeof document === 'undefined') return;
+
+        const applyTheme = () => {
             document.documentElement.classList.add('DayniteJs-transition');
             document.documentElement.setAttribute('data-theme', theme);
             // Add/remove Tailwind-compatible 'dark' class
@@ -72,10 +89,19 @@ export default class DayniteJs {
             storeTheme(this.storageKey, theme);
             this.callbacks.forEach((cb) => cb(theme));
 
-            setTimeout(() => {
+            if (this._transitionTimer) {
+                clearTimeout(this._transitionTimer);
+            }
+            this._transitionTimer = setTimeout(() => {
                 document.documentElement.classList.remove('DayniteJs-transition');
             }, 300);
-        });
+        };
+
+        if (typeof window !== 'undefined' && window.requestAnimationFrame) {
+            requestAnimationFrame(applyTheme);
+        } else {
+            applyTheme();
+        }
     }
 
     /**
@@ -83,6 +109,7 @@ export default class DayniteJs {
      * @returns {string} The current theme name.
      */
     getTheme() {
+        if (typeof document === 'undefined') return this.defaultTheme;
         return document.documentElement.getAttribute('data-theme') || this.defaultTheme;
     }
 
@@ -125,6 +152,7 @@ export default class DayniteJs {
      * @param {string} theme - Theme name.
      */
     applyCustomStyles(theme) {
+        if (typeof document === 'undefined') return;
         const styles = this.customStyles[theme];
         if (styles && typeof styles === 'object') {
             Object.entries(styles).forEach(([key, value]) => {

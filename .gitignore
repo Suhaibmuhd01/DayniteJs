@@ -6,6 +6,7 @@ build/
 .vscode/
 .DS_Store
 .env
+.qodo
 *.log
 *.tmp
 *.cache

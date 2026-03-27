@@ -1,14 +1,14 @@
 # Changelog
 
-[1.0.0] - 2025-07-10
-Added
+## [1.1.0] - Upcoming
+- **FIX**: Package export paths now correctly resolve dist bundles without case-sensitivity errors.
+- **FIX**: SSR environments (Next.js/Nuxt) no longer crash from `ReferenceError: document is not defined`.
+- **FIX**: Exposing ESM, CommonJS, and UMD builds via Rollup to support all module loaders and environments.
+- **FEATURE**: Added `.destroy()` method to easily clean up `matchMedia` event listeners and avoid memory leaks.
+- **FEATURE**: Added `data-daynitejs-auto` support for zero-config script initializations right from the DOM.
 
-Initial release of DayniteJs.
-Theme toggling with light and dark modes.
-System preference detection via prefers-color-scheme.
-localStorage persistence.
-Tailwind CSS compatibility with dark class.
-Smooth transitions with .DayniteJs-transition.
-Event system for theme changes.
-Modular architecture with core and utility modules.
-Demo page and comprehensive documentation.
+## [1.0.0] - Initial Release
+- Basic theme toggling logic
+- Configuration options (`themes`, `defaultTheme`, `customStyles`)
+- `localStorage` persistence
+- Basic documentation
