@@ -1,6 +1,6 @@
 # DayniteJs
 
-A lightweight, modern JavaScript library for toggling light and dark themes with blazing-fast performance, system preference detection, and persistent user settings. Perfect for any web project!
+A lightweight, modern JavaScript library for toggling light and dark themes with blazing-fast performance, system preference detection, and persistent user settings. Perfect for any web project including SSR frameworks like Next.js and Nuxt.js!
 
 ---
 
@@ -10,21 +10,29 @@ A lightweight, modern JavaScript library for toggling light and dark themes with
 - 🖥️ Detects system theme via `prefers-color-scheme`
 - 💾 Persists user preference in `localStorage`
 - 🎨 Supports Tailwind CSS and smooth CSS transitions
-- ⚡ Simple, event-driven API
+- ⚡ **SSR Safe**: Will not crash your Next.js or Nuxt.js app on the server.
+- 🧹 **Zero Memory Leaks**: Includes a `.destroy()` method for single page apps (SPA).
+- 📦 **Universal Modules**: Supports ESM, CommonJS, and UMD directly via CDN.
 
 ---
 
 ## 🚀 Installation
 
+Via NPM:
 ```bash
 npm install daynitejs
+```
+
+Via CDN (UMD):
+```html
+<script src="https://unpkg.com/daynitejs/dist/daynitejs.umd.js"></script>
 ```
 
 ---
 
 ## 🛠️ Usage
 
-### Basic Setup
+### 1. Basic Setup (ESM)
 
 ```js
 import DayniteJs from 'daynitejs';
@@ -38,105 +46,89 @@ const daynite = new DayniteJs({
   }
 });
 
+// Toggle the theme
 daynite.toggle();
+
+// Listen to changes
 daynite.onThemeChange(theme => console.log(`Theme changed to: ${theme}`));
 ```
 
----
-
-### CSS Setup
-
-Define theme-specific styles using `[data-theme]`:
-
-```css
-[data-theme="light"] {
-  --bg-color: #ffffff;
-  --text-color: #1f2937;
-}
-
-[data-theme="dark"] {
-  --bg-color: #1f2937;
-  --text-color: #f3f4f6;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-/* Smooth transitions */
-.DayniteJs-transition,
-.DayniteJs-transition * {
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-```
-
----
-
-### HTML Example
+### 2. Auto-Initialization via HTML
+For a zero-JS-config setup, just add `data-daynitejs-auto` to the script tag!
 
 ```html
-<button id="toggle-btn" aria-label="Toggle theme">Toggle Theme</button>
-<script type="module">
-  import DayniteJs from 'daynitejs';
-  const daynite = new DayniteJs();
-  document.getElementById('toggle-btn').addEventListener('click', () => daynite.toggle());
-</script>
+<script type="module" src="https://unpkg.com/daynitejs/dist/daynitejs.esm.js" data-daynitejs-auto></script>
+
+<button onclick="window.daynite.toggle()">Toggle Theme</button>
 ```
 
 ---
 
-## 📚 API
+### React / Next.js Setup
+
+DayniteJs is fully SSR safe. Make sure you initialize it on the client side (e.g., inside `useEffect`).
+
+```jsx
+import { useEffect, useState } from 'react';
+import DayniteJs from 'daynitejs';
+
+export default function App() {
+  const [daynite, setDaynite] = useState(null);
+
+  useEffect(() => {
+    // Initialize daynite on the client side
+    const instance = new DayniteJs();
+    setDaynite(instance);
+
+    // Clean up event listeners on unmount
+    return () => instance.destroy();
+  }, []);
+
+  return (
+    <button onClick={() => daynite?.toggle()}>
+      Toggle Theme
+    </button>
+  );
+}
+```
+
+---
+
+## 📚 API Reference
 
 - `new DayniteJs(options)` — Initialize with themes, default theme, and custom styles
-- `daynite.init()` — Initializes the theme based on system or local preference (called automatically)
+- `daynite.init()` — Initializes the theme based on system or local preference
 - `daynite.toggle()` — Manually toggles theme
 - `daynite.setTheme('dark' | 'light')` — Explicitly set the theme
 - `daynite.getTheme()` — Returns the current theme
 - `daynite.reset()` — Resets to system/default theme
 - `daynite.onThemeChange(callback)` — Subscribes to theme change events
-
-### Options
-
-- `themes`: Array of theme names (default: `["light", "dark"]`)
-- `defaultTheme`: Fallback theme (default: `'light'`)
-- `storageKey`: localStorage key (default: `'DayniteJs-theme'`)
-- `customStyles`: CSS variables per theme
+- `daynite.destroy()` — Cleans up event listeners and prevents memory leaks
 
 ---
 
-## 🧑‍💻 Development
+## 🧰 Troubleshooting
 
-Build minified bundle:
+**Q: I get "Module not found" or case-sensitivity errors on Linux/Vercel.**
+A: *Update to v1.1.0 or later!* Earlier versions had a known bug with export path casing.
 
-```bash
-npm run build
-```
-
-Run tests:
-
-```bash
-npm test
-```
+**Q: ReferenceError: document is not defined**
+A: *Update to v1.1.0 or later!* The library is now fully SSR compatible and safely checks for the document object.
 
 ---
 
-## 🖥️ Running the Example Demo
+## 🖥️ Running the Local Demo
 
-To test the theme toggle demo in your browser:
-
-1. Build the library:
+1. Clone and build the library:
    ```bash
+   npm install
    npm run build
    ```
-2. Serve the project root with a local HTTP server:
+2. Serve the root directory:
    ```bash
    npm run serve
    ```
-3. Open your browser and go to:
-   [http://localhost:3000/examples/](http://localhost:3000/examples/)
-
-> **Note:** Opening `examples/index.html` directly from the filesystem will not work due to browser security restrictions. Always use a local server.
+3. Open `http://localhost:3000/demo/` in your browser.
 
 ---
 
