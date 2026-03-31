@@ -1,10 +1,11 @@
 {
   "name": "daynitejs",
   "description": "A lightweight JavaScript library for toggling light and dark themes.",
-  "version": "1.1.0",
-  "main": "dist/daynitejs.cjs.js",
+  "version": "1.2.0",
+  "main": "dist/daynitejs.cjs",
   "module": "dist/daynitejs.esm.js",
   "unpkg": "dist/daynitejs.umd.js",
+  "types": "./daynitejs.d.ts",
   "type": "module",
   "scripts": {
     "test": "jest",
@@ -18,8 +19,9 @@
   },
   "exports": {
     ".": {
+      "types": "./daynitejs.d.ts",
       "import": "./dist/daynitejs.esm.js",
-      "require": "./dist/daynitejs.cjs.js",
+      "require": "./dist/daynitejs.cjs",
       "default": "./dist/daynitejs.umd.js"
     }
   },
@@ -56,23 +58,7 @@
     "rollup": "^4.44.2"
   },
   "files": [
-    "example",
     "dist",
-    "dist/dayniteJs.min.js",
-    "dist/dayniteJs.min.js.map",
-    "docs",
-    "src",
-    "test",
-    ".gitignore",
-    "API.md",
-    "babel.config.js",
-    "CHANGELOG.md",
-    "eslint.config.js",
-    "jest.config.js",
-    "LICENSE",
-    "Package-lock.json",
-    "package.json",
-    "README.md",
-    "rollup.config.js"
+    "daynitejs.d.ts"
   ]
 }

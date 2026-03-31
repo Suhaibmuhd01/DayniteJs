@@ -9,7 +9,7 @@ export default {
             sourcemap: true
         },
         {
-            file: 'dist/daynitejs.cjs.js',
+            file: 'dist/daynitejs.cjs',
             format: 'cjs',
             sourcemap: true,
             exports: 'auto'
