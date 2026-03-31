@@ -2,7 +2,7 @@
  * DayniteJs: Core theme toggle logic.
  * @module DayniteJs
  * @author Suhaib Muhammad Babangida <suhaibmuhd04@gmail.com>
- * @version 1.1.0
+ * @version 1.2.0
  */
 import { getStoredTheme, storeTheme } from '../utils/storage.js';
 import { isValidTheme } from '../utils/validation.js';
@@ -29,6 +29,7 @@ export default class DayniteJs {
         this.callbacks = [];
         this._transitionTimer = null;
         this._mediaQueryListener = null;
+        this._mediaQueryList = null;
         this.init();
     }
 
@@ -48,7 +49,12 @@ export default class DayniteJs {
             this._mediaQueryListener = (e) => {
                 this.setTheme(e.matches ? 'dark' : 'light');
             };
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this._mediaQueryListener);
+            this._mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+            if (this._mediaQueryList.addEventListener) {
+                this._mediaQueryList.addEventListener('change', this._mediaQueryListener);
+            } else if (this._mediaQueryList.addListener) { // Fallback for older browsers
+                this._mediaQueryList.addListener(this._mediaQueryListener);
+            }
         }
     }
 
@@ -56,8 +62,12 @@ export default class DayniteJs {
      * Destroys the instance and cleans up memory.
      */
     destroy() {
-        if (typeof window !== 'undefined' && window.matchMedia && this._mediaQueryListener) {
-            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this._mediaQueryListener);
+        if (this._mediaQueryList && this._mediaQueryListener) {
+            if (this._mediaQueryList.removeEventListener) {
+                this._mediaQueryList.removeEventListener('change', this._mediaQueryListener);
+            } else if (this._mediaQueryList.removeListener) {
+                this._mediaQueryList.removeListener(this._mediaQueryListener);
+            }
         }
         if (this._transitionTimer) {
             clearTimeout(this._transitionTimer);
@@ -141,11 +151,16 @@ export default class DayniteJs {
     /**
      * Subscribes to theme change events.
      * @param {Function} callback - Called with the new theme.
+     * @returns {Function} Unsubscribe function.
      */
     onThemeChange(callback) {
         if (typeof callback === 'function') {
             this.callbacks.push(callback);
+            return () => {
+                this.callbacks = this.callbacks.filter(cb => cb !== callback);
+            };
         }
+        return () => {};
     }
 
     /**

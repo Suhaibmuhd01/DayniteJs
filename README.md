@@ -1,42 +1,64 @@
-# DayniteJs
+<div align="center">
+  <h1>🌗 DayniteJs</h1>
+  <p><strong>A framework-agnostic, zero-dependency, and hyper-fast theme toggling library.</strong></p>
 
-A lightweight, modern JavaScript library for toggling light and dark themes with blazing-fast performance, system preference detection, and persistent user settings. Perfect for any web project including SSR frameworks like Next.js and Nuxt.js!
+  <p>
+    <a href="https://www.npmjs.com/package/daynitejs"><img src="https://img.shields.io/npm/v/daynitejs?style=flat-square&color=blue" alt="NPM Version" /></a>
+    <a href="https://bundlephobia.com/package/daynitejs"><img src="https://img.shields.io/bundlephobia/minzip/daynitejs?style=flat-square&color=success" alt="Bundle Size" /></a>
+    <a href="https://github.com/suhaibmuhd01/daynitejs/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/daynitejs?style=flat-square&color=yellow" alt="License" /></a>
+    <a href="https://www.npmjs.com/package/daynitejs"><img src="https://img.shields.io/npm/dt/daynitejs?style=flat-square&color=blueviolet" alt="Downloads" /></a>
+  </p>
 
----
-
-## ✨ Features
-
-- 🌗 Toggle between light, dark, or custom themes
-- 🖥️ Detects system theme via `prefers-color-scheme`
-- 💾 Persists user preference in `localStorage`
-- 🎨 Supports Tailwind CSS and smooth CSS transitions
-- ⚡ **SSR Safe**: Will not crash your Next.js or Nuxt.js app on the server.
-- 🧹 **Zero Memory Leaks**: Includes a `.destroy()` method for single page apps (SPA).
-- 📦 **Universal Modules**: Supports ESM, CommonJS, and UMD directly via CDN.
+  <p>Perfect for everything from plain HTML sites to complex SSR React, Next.js, and Nuxt.js apps.</p>
+</div>
 
 ---
 
-## 🚀 Installation
+## ⚡ Why DayniteJs?
 
-Via NPM:
+When it comes to dark mode toggling, developers usually face memory leaks in SPAs, hydration mismatches in Next.js/Nuxt.js, and annoying layout shifts.
+
+**DayniteJs solves all of this out of the box.**
+
+- 🚫 **Zero Dependencies**: Pure Vanilla Javascript.
+- 💨 **Lightweight**: Extremely small bundle size (~1KB minified).
+- 🧠 **Smart Memory Management**: Comes with robust cleanup mechanisms making it 100% leak-free for SPAs.
+- 🛡️ **Built-in Security**: Hardened against `localStorage` poisoning.
+- 🌍 **Universal Modules**: Out of the box ESM, CommonJS, and UMD support for browsers.
+- 🧲 **Full TypeScript Support**: Written with complete `.d.ts` types for rich IDE IntelliSense.
+
+---
+
+## 🚀 Quick Start (Under 30 Seconds)
+
+### Option 1: View CDN (No Build Tool Required)
+
+Drop this into your HTML `<head>` or before the closing `</body>` tag:
+
+```html
+<!-- Load Daynite.js automagically! -->
+<script type="module" src="https://unpkg.com/daynitejs/dist/daynitejs.esm.js" data-daynitejs-auto></script>
+
+<!-- Use a button to toggle -->
+<button onclick="window.daynite.toggle()">Toggle Theme</button>
+```
+
+### Option 2: Via NPM (React, Vue, Vite, Next.js)
+
+Install it inside your project:
 ```bash
 npm install daynitejs
 ```
-
-Via CDN (UMD):
-```html
-<script src="https://unpkg.com/daynitejs/dist/daynitejs.umd.js"></script>
+```bash
+pnpm install daynitejs
 ```
 
----
-
-## 🛠️ Usage
-
-### 1. Basic Setup (ESM)
+Initialize your theme in your app entry (e.g., `main.js`, `_app.js`, `App.vue` or `useEffect`):
 
 ```js
 import DayniteJs from 'daynitejs';
 
+// Initialize the magic 🪄
 const daynite = new DayniteJs({
   themes: ['light', 'dark'],
   defaultTheme: 'light',
@@ -46,41 +68,29 @@ const daynite = new DayniteJs({
   }
 });
 
-// Toggle the theme
+// Toggle anywhere in your app:
 daynite.toggle();
-
-// Listen to changes
-daynite.onThemeChange(theme => console.log(`Theme changed to: ${theme}`));
-```
-
-### 2. Auto-Initialization via HTML
-For a zero-JS-config setup, just add `data-daynitejs-auto` to the script tag!
-
-```html
-<script type="module" src="https://unpkg.com/daynitejs/dist/daynitejs.esm.js" data-daynitejs-auto></script>
-
-<button onclick="window.daynite.toggle()">Toggle Theme</button>
 ```
 
 ---
 
-### React / Next.js Setup
+## 🖥 React & Next.js Implementation
 
-DayniteJs is fully SSR safe. Make sure you initialize it on the client side (e.g., inside `useEffect`).
+DayniteJs is 100% hydration-safe and SSR-compatible.
 
-```jsx
+```tsx
 import { useEffect, useState } from 'react';
 import DayniteJs from 'daynitejs';
 
-export default function App() {
-  const [daynite, setDaynite] = useState(null);
+export default function ThemeToggler() {
+  const [daynite, setDaynite] = useState<DayniteJs | null>(null);
 
   useEffect(() => {
-    // Initialize daynite on the client side
+    // 1. Initialize client-side
     const instance = new DayniteJs();
     setDaynite(instance);
 
-    // Clean up event listeners on unmount
+    // 2. Prevent memory leaks on unmount
     return () => instance.destroy();
   }, []);
 
@@ -96,50 +106,76 @@ export default function App() {
 
 ## 📚 API Reference
 
-- `new DayniteJs(options)` — Initialize with themes, default theme, and custom styles
-- `daynite.init()` — Initializes the theme based on system or local preference
-- `daynite.toggle()` — Manually toggles theme
-- `daynite.setTheme('dark' | 'light')` — Explicitly set the theme
-- `daynite.getTheme()` — Returns the current theme
-- `daynite.reset()` — Resets to system/default theme
-- `daynite.onThemeChange(callback)` — Subscribes to theme change events
-- `daynite.destroy()` — Cleans up event listeners and prevents memory leaks
+**`new DayniteJs(options)`**
+Accepts a configuration object to change defaults.
+```ts
+{
+  themes?: string[]; // e.g. ['light', 'dark', 'dim']
+  defaultTheme?: string; // fallback theme
+  storageKey?: string; // localStorage custom key
+  customStyles?: Record<string, object>; // bind CSS vars to specific themes
+}
+```
+
+**`daynite.toggle()`**
+Cycles dynamically to the next installed theme in the array.
+
+**`daynite.setTheme(theme)`**
+Explicitly switch to a specified theme name (e.g. `daynite.setTheme('dark')`).
+
+**`daynite.getTheme()`**
+Returns the string name of the currently active theme.
+
+**`daynite.reset()`**
+Resets the theme layout to follow the system preference (detects `prefers-color-scheme`).
+
+**`daynite.onThemeChange(callback)`**
+Subscribes to theme changes. Returns an `unsubscribe` function to help prevent memory leaks.
+```js
+const unsubscribe = daynite.onThemeChange((activeTheme) => {
+  console.log('User swapped to:', activeTheme);
+});
+// Call unsubscribe() when component unmounts
+```
+
+**`daynite.destroy()`**
+Removes all system event listeners and forcefully unbinds functions from memory. Essential for routing in SPA frameworks.
 
 ---
 
-## 🧰 Troubleshooting
+## 🧰 Troubleshooting / FAQs
 
-**Q: I get "Module not found" or case-sensitivity errors on Linux/Vercel.**
-A: *Update to v1.1.0 or later!* Earlier versions had a known bug with export path casing.
+<details>
+<summary><strong>Q: I get "ReferenceError: document is not defined"</strong></summary>
+<br>
+<strong>A:</strong> Initialize DayniteJs dynamically inside a client-side hook (like `useEffect` or Vue's `onMounted`), or conditionally check `typeof window !== 'undefined'` before initializing.
+</details>
 
-**Q: ReferenceError: document is not defined**
-A: *Update to v1.1.0 or later!* The library is now fully SSR compatible and safely checks for the document object.
+<details>
+<summary><strong>Q: Does DayniteJs work with Tailwind CSS?</strong></summary>
+<br>
+<strong>A:</strong> Yes! DayniteJs appends a `dark` class globally on the `<html>` root specifically mapped to support Tailwind CSS `darkMode: 'class'` configuration effortlessly.
+</details>
 
----
-
-## 🖥️ Running the Local Demo
-
-1. Clone and build the library:
-   ```bash
-   npm install
-   npm run build
-   ```
-2. Serve the root directory:
-   ```bash
-   npm run serve
-   ```
-3. Open `http://localhost:3000/demo/` in your browser.
+<details>
+<summary><strong>Q: My custom CSS styles aren't appearing!</strong></summary>
+<br>
+<strong>A:</strong> Make sure you define them inside the `customStyles` configuration during instantiation and verify that your CSS utilizes `var(--your-variable)` correctly.
+</details>
 
 ---
 
-## 👤 Author
+## 🤝 Community & Contributing
 
-**DayniteJs** is developed and maintained by Suhaib Muhammad Babangida.
+We actively welcome contributions to grow DayniteJs! 
 
-> If you like this project, please ⭐ it on GitHub and share it with your friends!
+1. Read our [Contributing Guidelines](CONTRIBUTING.md) to get started.
+2. Please observe our [Code of Conduct](CODE_OF_CONDUCT.md).
+3. If you find a bug, please create a [Bug Report](https://github.com/suhaibmuhd01/daynitejs/issues/new?template=bug_report.md).
+4. Have an idea? Open a [Feature Request](https://github.com/suhaibmuhd01/daynitejs/issues/new?template=feature_request.md).
 
 ---
 
 ## 📄 License
 
-Licensed by MIT
+MIT Copyright (c) Suhaib Muhammad Babangida.

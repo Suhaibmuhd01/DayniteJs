@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.1.0] - Upcoming
+## [1.2.0] - Upcoming
+- **SECURITY**: LocalStorage poisoning prevention.
+- **FIX**: Memory leak in `window.matchMedia` resolved for SPAs.
+- **FIX**: Callback leak in `onThemeChange` resolved via returned unsubscribe function.
+- **FEATURE**: Complete TypeScript definitions (`daynitejs.d.ts`) included out of the box.
+
+## [1.1.0] - 2026-03-31
 - **FIX**: Package export paths now correctly resolve dist bundles without case-sensitivity errors.
 - **FIX**: SSR environments (Next.js/Nuxt) no longer crash from `ReferenceError: document is not defined`.
 - **FIX**: Exposing ESM, CommonJS, and UMD builds via Rollup to support all module loaders and environments.
