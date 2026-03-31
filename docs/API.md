@@ -20,7 +20,7 @@ Creates a new DayniteJs instance.
 - `toggle()` — Cycles to the next theme in the themes array.
 - `getTheme()` — Returns the current theme.
 - `reset()` — Resets to system/default theme.
-- `onThemeChange(callback)` — Subscribes to theme change events.
+- `onThemeChange(callback)` — Subscribes to theme change events. Returns an `unsubscribe` function: `() => void`.
 
 ## Example
 
@@ -35,7 +35,10 @@ daynite.toggle();
 daynite.setTheme('dark');
 console.log(daynite.getTheme());
 daynite.reset();
-daynite.onThemeChange(theme => console.log(`Theme changed to: ${theme}`));
+const unsubscribe = daynite.onThemeChange(theme => console.log(`Theme changed to: ${theme}`));
+
+// Later, for instance during component unmount:
+// unsubscribe();
 ```
 
 ## CSS Setup

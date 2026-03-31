@@ -2,7 +2,7 @@
   "name": "daynitejs",
   "description": "A lightweight JavaScript library for toggling light and dark themes.",
   "version": "1.2.0",
-  "main": "dist/daynitejs.cjs.js",
+  "main": "dist/daynitejs.cjs",
   "module": "dist/daynitejs.esm.js",
   "unpkg": "dist/daynitejs.umd.js",
   "types": "./daynitejs.d.ts",
@@ -21,7 +21,7 @@
     ".": {
       "types": "./daynitejs.d.ts",
       "import": "./dist/daynitejs.esm.js",
-      "require": "./dist/daynitejs.cjs.js",
+      "require": "./dist/daynitejs.cjs",
       "default": "./dist/daynitejs.umd.js"
     }
   },
